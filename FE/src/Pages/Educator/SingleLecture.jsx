@@ -1,11 +1,11 @@
-import { useMutation, useQuery } from "@apollo/client"
-import Topbar from "./Topbar"
+import { Button, Input, Modal } from 'antd'
+import Topbar from './Topbar'
+import Sidebar from './Sidebar'
+import { GET_SINGLE_LECTURE } from '../../utils/query'
 import {useParams} from 'react-router-dom'
-import { GET_SINGLE_LECTURE } from "../../utils/query"
-import { useEffect, useState } from "react"
-import { Button, Input, Modal } from "antd"
-import { CREATE_DISCUSSION } from "../../utils/mutations"
-
+import { useMutation, useQuery } from '@apollo/client'
+import { useEffect, useState } from 'react'
+import { CREATE_ASSIGNMENT } from '../../utils/mutations'
 const SingleLecture = () => {
   const [open, setOpen] = useState(false);
   const {id} = useParams()
@@ -19,13 +19,16 @@ const SingleLecture = () => {
   const handleCancel= ()=>{
     setOpen(false)
   }
-  const [content,setContent] = useState("")
-  const [createDiscussion] = useMutation(CREATE_DISCUSSION,{onCompleted:()=>refetch()})
+  const [assignment,setAssignment] = useState({
+    content:"",
+    deadline:""
+  })
+  const [createAssignment] = useMutation(CREATE_ASSIGNMENT, {onCompleted:()=>refetch()})
   const handleSubmit = async()=>{
     console.log(lecture)
     try{
-      const res = await createDiscussion({
-        variables:{content,id:lecture.id}
+      const res = await createAssignment({
+        variables:{...assignment,lecture:lecture.id}
       })
       if(res.data){
         console.log(res.data);
@@ -33,7 +36,7 @@ const SingleLecture = () => {
     }catch(err){
       console.log(err.message);
     }
-    setContent("")
+    setLecture({content:"",deadline:""})
     setOpen(false)
   }
   function formatTimestamp(timestamp) {
@@ -48,18 +51,18 @@ const SingleLecture = () => {
     return formattedDate;
 }
   return (
-    <div>
-    <Topbar/>
-    {lecture?.title && 
-    <div className='flex flex-1 flex-col space-y-4 p-2'>
+    <div className='h-screen flex flex-col'>
+      <Topbar />
+      <div className='flex flex-1 *:p-2'>
+        <Sidebar />
+        {lecture?.title && <div className='flex flex-1 flex-col space-y-4'>
           <div className='flex justify-between'>
             <div>
               <p className='text-2xl'>{lecture.title}</p>
               <p>{lecture.course.title}</p>
             </div>
-            <div>
-            <Button onClick={()=>setOpen(true)}>Create Discussion</Button>
-            <Modal open={open} title="Create Discussion"
+            <Button onClick={()=>setOpen(true)}>Create Assignment</Button>
+              <Modal open={open} title="Create Assignment"
                 onCancel={handleCancel} 
                 footer={(_, { CancelBtn }) => (
                   <>
@@ -67,13 +70,13 @@ const SingleLecture = () => {
                     <Button onClick={handleSubmit}>Add</Button>
                   </>)}>
                 <div className="flex flex-col gap-4">
-                  <Input type="text" placeholder="Issue" value={content} onChange={(e)=>{setContent(e.target.value)}}/>
+                  <Input type="text" placeholder="Task" value={assignment.content} onChange={(e)=>{setAssignment({...assignment,content:e.target.value})}}/>
+                  <Input type="text" placeholder="Deadline" value={assignment.deadline} onChange={(e)=>{setAssignment({...assignment,deadline:e.target.value})}}/>
                 </div>
               </Modal>
-            </div>
           </div>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-          <p>{formatTimestamp(+(lecture?.createdAt))}</p>
+          <p>{formatTimestamp(+lecture.createdAt)}</p>
           <div>
             <p>Assignments</p>
             {lecture?.assignment?.length>0 ?lecture.assignment.map((item)=>
@@ -86,6 +89,7 @@ const SingleLecture = () => {
           </div>
           
         </div>}
+      </div>
     </div>
   )
 }

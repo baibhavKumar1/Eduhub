@@ -4,7 +4,7 @@ import { Pagination, Tabs } from "antd";
 
 const Lecture = () => {
   const [active,setActive] = useState(1);
-  const items=[{
+  const items=[{ 
     label:"Past lectures",
     key:1
   },{

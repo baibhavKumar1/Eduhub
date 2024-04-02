@@ -15,4 +15,4 @@ const SingleAssignment = () => {
   )
 }
 
-export default SingleAssignment
+export {SingleAssignment}

@@ -1,13 +1,14 @@
-const mongoose = require('mongoose')
+const {Schema,model} = require('mongoose')
 
-const discussionSchema = mongoose.Schema(
+const discussionSchema = new Schema(
     {
-        lecture:String,
-        creator:String,
+        lecture:{ type: Schema.Types.ObjectId, ref: 'Lecture' },
+        creator:{ type: Schema.Types.ObjectId, ref: 'User' },
         content:String
-    }
+    },
+    {versionKey:false}
 )
 
-const DiscussionModel = mongoose.model('discussion',discussionSchema)
+const DiscussionModel = model('Discussion',discussionSchema)
 
 module.exports = DiscussionModel

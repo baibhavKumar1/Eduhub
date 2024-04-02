@@ -1,27 +1,38 @@
 import { Route, Routes } from "react-router-dom";
-import Login from "../Pages/Login";
+import {Login} from "../Pages/Login";
 import Register from "../Pages/Register";
-import Dashboard from "../Pages/Admin/Dashboard";
-import {Dashboard as StudentDashboard} from "../Pages/Student/Dashboard";
-import {Lecture as StudentLecture} from "../Pages/Student/Lecture";
-import Course from "../Pages/Admin/Course";
-import Lecture from "../Pages/Admin/Lecture";
-import SingleLecture from "../Pages/Student/SingleLecture";
-import SingleAssignment from "../Pages/Student/SingleAssignment";
+import { Course,Students,Educators,Lectures,Dashboard,CourseLecture } from "../Pages/Admin";
+import { EducatorDashboard, EducatorLecture, EducatorSingleLecture, EducatorStudents } from "../Pages/Educator";
+import Trial from "../Pages/Trial";
+import Profile from "../Pages/Student/Profile";
+import { StudentDashboard, StudentLecture, StudentSingleAssignment, StudentSingleLecture } from "../Pages/Student";
 
 const AllRoutes = () => {
   return (
     <div>
-        <Routes>
+        <Routes>        
             <Route path='/login' element={<Login/>}/>
             <Route path="/" element={<Register/>}/>
+            {/* Admin Routes */}
             <Route path='/dashboard' element={<Dashboard/>}/>
-            <Route path='/course' element={<Course/>}/>
-            <Route path='/lecture' element={<Lecture/>}/>
+            <Route path='/courses' element={<Course/>}/>
+            <Route path='/lectures' element={<Lectures/>}/>
+            <Route path='/educators' element={<Educators/>}/>
+            <Route path='/students' element={<Students/>}/>
+            <Route path='/:type/:id' element={<CourseLecture/>}/>
+            {/* Educator Routes */}
+            <Route path="/edashboard" element={<EducatorDashboard/>}/>
+            <Route path="/electure" element={<EducatorLecture/>}/>
+            <Route path="/electure/:id" element={<EducatorSingleLecture/>}/>
+            <Route path="/estudent" element={<EducatorStudents/>}/>
+            
+            {/* Students Routes */}
             <Route path='/sdashboard' element={<StudentDashboard/>}/>
             <Route path="/slecture" element={<StudentLecture/>}/>
-            <Route path="/lecture/:id" element={<SingleLecture/>}/>
-            <Route path="/assignment/:id" element={<SingleAssignment/>}/>
+            <Route path="/slecture/:id" element={<StudentSingleLecture/>}/>
+            <Route path="/sassignment/:id" element={<StudentSingleAssignment/>}/>
+            <Route path="/trial" element={<Trial/>}/>
+            <Route path="/profile" element={<Profile/>}/>
         </Routes>
     </div>
   )

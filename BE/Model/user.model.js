@@ -1,18 +1,20 @@
-const mongoose =require('mongoose');
+const {Schema,model} = require('mongoose');
 
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema(
     {
-        name:String,
+        username:String,
         email:String,
         password:String,
         avatar:String,
         role:{
             type:String,
-            enum:['Admin','Student']
+            enum: ['Educator','Student'],
+            default:"Student"
         },
-        courses:[String]
+        courses:{ type: [Schema.Types.ObjectId], ref: 'Course' },
+        notifications:{ type: [Schema.Types.ObjectId], ref: 'Notification' }
     },{versionKey:false}
 )
 
-const UserModel = mongoose.model('User',userSchema);
+const UserModel = model('User',userSchema);
 module.exports= UserModel;
