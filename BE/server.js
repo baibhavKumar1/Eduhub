@@ -5,6 +5,7 @@ const connection = require('./db.js');
 const { auth } = require('./Middleware/auth.middleware.js');
 const typeDefs = require('./schemas/typeDef.js');
 const resolvers = require('./schemas/resolvers.js');
+const cors = require('cors')
 //const { consumeCreateLecture,consumeCreateAssignment } = require('./utils/consumerabbitmq.js');
 const PORT = process.env.PORT || 3000;
 
@@ -15,7 +16,7 @@ const Apolloserver = new ApolloServer({
   resolvers,
   context: auth,
 });
-
+app.use(cors())
 app.use(express.json());
 //consumeCreateLecture();
 //consumeCreateAssignment()

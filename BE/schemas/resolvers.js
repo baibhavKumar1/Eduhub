@@ -8,9 +8,9 @@ const { io } = require("socket.io-client");
 const { AuthenticationError } = require('apollo-server-express');
 //const { connectRabbitMQ } = require('../utils/rabbitmq');
 const { client } = require('../redis');
-
+require('dotenv').config()
 //const channel = connectRabbitMQ()
-const socket = io.connect("http://localhost:3000");
+const socket = io.connect(`${process.env.BACKEND_URL}`);
 const resolvers = {
 
   Query: {
