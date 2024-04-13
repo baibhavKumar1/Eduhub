@@ -1,5 +1,5 @@
 import { useMutation } from "@apollo/client";
-import { Button } from "antd"
+import { Button, Input } from "antd"
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LOGIN } from "../utils/mutations";
@@ -50,9 +50,9 @@ const Login = () => {
         <h1 className="text-center font-semibold text-2xl">Sign In</h1>
         <div className="flex flex-col gap-2">
         <label htmlFor="email">Email</label>
-        <input id="email" name="email" onChange={handleChange} type="text" className="outline-none bg-gray-200 rounded border border-black p-1" />
+        <Input id="email" name="email" onChange={handleChange} type="text" className="outline-none bg-gray-200 p-1" />
         <label htmlFor="password">Password</label>
-        <input id="password" name="password" onChange={handleChange} type="password" className="outline-none bg-gray-200 rounded border border-black p-1" />
+        <Input id="password" name="password" onChange={handleChange} type="password" className="outline-none bg-gray-200 p-1"/>
           </div>
         <div className="flex justify-between">
           <Button className="w-max bg-black text-white" onClick={handleSubmit}>Submit</Button>

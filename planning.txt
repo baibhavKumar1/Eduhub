@@ -1,0 +1,9 @@
+Admin dashboard
+dashboard :
+- registrations
+- users
+- recent activity
+
+courses:
+- trending courses
+- course management

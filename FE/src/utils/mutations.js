@@ -5,7 +5,7 @@ export const LOGIN = gql`
     login(email: $email, password: $password) {
       token
       user {
-        _id
+        id
         username
         email
         role
@@ -19,7 +19,7 @@ export const CREATE_USER = gql`
       createUser(username: $username, email: $email, password: $password) {
         token
         user {
-          _id
+          id
           username
           email
           role
@@ -30,7 +30,7 @@ export const CREATE_USER = gql`
 export const ADD_COURSE = gql`
     mutation AddCourse($courses: [ID!]!) {
         addCourse(courses: $courses) {
-          _id
+          id
           role
           courses
         }
@@ -54,11 +54,9 @@ mutation CompleteLecture($id: ID!) {
     id
     title
     creator
-    course
     url
     duration
     createdAt
-    completedBy
   }
 }
 `
@@ -68,7 +66,6 @@ export const CREATE_LECTURE = gql`
         id
         title
         creator
-        course
         url
         duration
         createdAt

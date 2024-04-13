@@ -1,21 +1,33 @@
 import { Button, Modal, Input } from "antd"
 import Topbar from "./Topbar"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom'
 import Sidebar from "./Sidebar";
 import { GET_COURSES } from "../../utils/query";
 import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_COURSE } from "../../utils/mutations";
+import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts'
 
 const Course = () => {
   const {data,refetch} = useQuery(GET_COURSES)
-  console.log(data?.getAllCourses);
+  const [courses,setCourses]=useState([])
+  useEffect(()=>{
+       setCourses(data?.getAllCourses)
+  },[data?.getAllCourses])
   const navigate = useNavigate()
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
-  };
-  const [course,setCourse] = useState({
+  }; 
+  let dataSet;
+  if(data?.getAllCourses && courses?.length>0){
+    dataSet = courses.map(({ title, users }) => ({
+    title,
+    Students: users.length
+  })).sort((a, b) => b.students - a.students);
+  }
+  
+  const [course,setCourse] = useState({ 
     title:"",
     duration:"",
     description:""
@@ -64,13 +76,23 @@ const Course = () => {
                 </div>
               </Modal>
             </div>
-            <div className="h-56 my-2 border p-1 rounded">
+            <div className="h-56 my-2 border border-black p-1 rounded h-max">
               <p>Trending Courses</p>
-              <div></div>
+              <div>
+              <LineChart width={600} height={200} style={{width:"500px"}} data={dataSet}
+              className="m-auto w-full">
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="title" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="Students" stroke="#8884d8" />
+            </LineChart>
+              </div>
             </div>
-            <div className="flex flex-wrap gap-8 *:w-[200px] *:h-[200px] *:border *:text-center justify-center p-4 *:flex *:justify-center *:flex-col *:rounded">
+            <div className="flex flex-wrap gap-8 *:w-[200px] *:h-[200px] *:border *:text-center justify-center p-4 *:flex *:justify-center *:flex-col *:rounded *:border-black">
               {data?.getAllCourses && data?.getAllCourses.map((item)=>{return(
-                <div className="border " onClick={() => navigate(`/course/${item.id}`)} key={item.id}>
+                <div className="border cursor-pointer" onClick={() => navigate(`/course/${item.id}`)} key={item.id}>
                 <p>{item.title}</p>
                 <p>This is the first batch of MERN stack development</p>
                 <p>Students: {item.users.length}</p>

@@ -6,10 +6,7 @@ const lectureSchema = new Schema(
        course:{ type: Schema.Types.ObjectId, ref: 'Course' },
        url:String,
        duration:String,
-       createdAt:{
-        type:Date,
-        default:Date.now
-       },
+       createdAt:{type:Date,default:Date.now},
        assignment:{ type: [Schema.Types.ObjectId], ref: 'Assignment' },
        discussion:{ type: [Schema.Types.ObjectId], ref: 'Discussion' },
        completedBy:{ type: [Schema.Types.ObjectId], ref: 'User' }

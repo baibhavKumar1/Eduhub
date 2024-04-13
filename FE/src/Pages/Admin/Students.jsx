@@ -1,9 +1,23 @@
 import Topbar from "./Topbar"
 import Sidebar from "./Sidebar"
 import { useState } from "react";
-import { Button, Modal, Input } from "antd"
+import { Button, Modal, Input, Tooltip } from "antd"
+import { useQuery } from "@apollo/client";
+import { GET_STUDENTS_TASK } from "../../utils/query";
+import { CartesianGrid, Legend, Line, LineChart, XAxis, YAxis } from "recharts";
 const Students = () => {
   const [open, setOpen] = useState(false);
+  const {data} = useQuery(GET_STUDENTS_TASK)
+  const dataSet = data?.getStudentsTasks?.filter((item)=>item.role === "Student").map((item)=>(
+      {
+        id:item.id,
+        Name:item.username,
+        Assignments:item.completedAssignments.length,
+        Lectures:item.completedLectures.length,
+        Role:item.role
+      }
+    ))
+ 
   const showModal = () => {
     setOpen(true);
   };
@@ -36,41 +50,28 @@ const Students = () => {
                 </div>
               </Modal>
             </div>
-            <div className="h-56 my-2 border p-1 rounded">
+            <div className="h-56 my-2 border border-black p-1 rounded">
               <p>Trending Students</p>
-              <div></div>
+              <div>
+              <LineChart width={600} height={200} style={{width:"500px"}} data={dataSet?.sort((a,b)=>a.Lectures-b.Lectures)}
+              className="m-auto w-full">
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="Name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="Lectures" stroke="#8884d8" />
+              <Line type="monotone" dataKey="Assignments" stroke="#82ca9d" />
+            </LineChart>
+              </div>
             </div>
-            <div className="flex flex-wrap gap-8 *:w-[200px] *:h-[200px] *:border *:text-center justify-center p-4 *:flex *:justify-center *:flex-col *:rounded">
-              <div className="border ">
-                <p>MERN-101</p>
-                <p>This is the first batch of MERN stack development</p>
-                <p>Courses: 23</p>
-              </div>
-              <div>
-                <p>MERN-102</p>
-                <p>This is the second batch of MERN stack development</p>
-                <p>Courses: 32</p>
-              </div>
-              <div>
-                <p>MERN-103</p>
+            <div className="flex flex-wrap gap-8 *:w-[200px] *:h-[200px] *:border *:text-center justify-center p-4 *:flex *:justify-center *:flex-col *:rounded *:border-black">
+              {data?.getStudentsTasks && dataSet.map((item)=>{
+              return(<div key={item.id}>
+                <p>{item.Name.toUpperCase()}</p>
                 <p>This is the third batch of MERN stack development</p>
                 <p>Courses: 45</p>
-              </div>
-              <div className="border">
-                <p>MERN-101</p>
-                <p>This is the first batch of MERN stack development</p>
-                <p>Courses: 23</p>
-              </div>
-              <div>
-                <p>MERN-102</p>
-                <p>This is the second batch of MERN stack development</p>
-                <p>Courses: 32</p>
-              </div>
-              <div>
-                <p>MERN-103</p>
-                <p>This is the third batch of MERN stack development</p>
-                <p>Courses: 45</p>
-              </div>
+              </div>)})}
             </div>
           </div>
         </div>

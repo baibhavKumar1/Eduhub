@@ -5,9 +5,10 @@ import { GET_SINGLE_LECTURE } from '../../utils/query'
 import {useParams} from 'react-router-dom'
 import { useMutation, useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
-import { CREATE_ASSIGNMENT } from '../../utils/mutations'
+import { CREATE_ASSIGNMENT, CREATE_DISCUSSION, DELETE_DISCUSSION } from '../../utils/mutations'
 const SingleLecture = () => {
   const [open, setOpen] = useState(false);
+  const [open1, setOpen1] = useState(false);
   const {id} = useParams()
   const {data,refetch} = useQuery(GET_SINGLE_LECTURE,{
     variables: { id: id }
@@ -18,13 +19,46 @@ const SingleLecture = () => {
   },[data])
   const handleCancel= ()=>{
     setOpen(false)
+    setOpen1(false)
   }
   const [assignment,setAssignment] = useState({
     content:"",
     deadline:""
   })
+  const [discussion,setDiscussion] = useState({
+    content:"",
+  })
+  const [createDiscussion] = useMutation(CREATE_DISCUSSION, { onCompleted: () => refetch() })
+  const [deleteDiscussion] = useMutation(DELETE_DISCUSSION, { onCompleted: () => refetch() })
   const [createAssignment] = useMutation(CREATE_ASSIGNMENT, {onCompleted:()=>refetch()})
-  const handleSubmit = async()=>{
+  const handleDiscussionCreation = async()=>{
+    console.log(lecture)
+    try{
+      const res = await createDiscussion({
+        variables:{content:discussion.content,id:lecture.id}
+      })
+      if(res.data){
+        console.log(res.data);
+      }
+    }catch(err){
+      console.log(err.message);
+    }
+    setDiscussion({content:""})
+    setOpen1(false)
+  }
+  const handleDeleteDiscussion=async(discussionId)=>{
+    try{
+      const res = await deleteDiscussion({
+        variables:{id:discussionId}
+      })
+      if(res.data){
+        console.log(res.data);
+      }
+    }catch(err){
+      console.log(err.message);
+    }
+  }
+  const handleAssignmentCreation = async()=>{
     console.log(lecture)
     try{
       const res = await createAssignment({
@@ -46,8 +80,10 @@ const SingleLecture = () => {
     const day = date.getDate();
     const monthIndex = date.getMonth();
     const year = date.getFullYear();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
     const formattedDay = `${day}${suffixes[day - 1]}`;
-    const formattedDate = `${formattedDay} ${months[monthIndex]}, ${year}`;
+    const formattedDate = `${formattedDay} ${months[monthIndex]}, ${year} ${hours>9?hours:"0"+hours}:${minutes>9 ? minutes : "0"+minutes}`;
     return formattedDate;
 }
   return (
@@ -67,11 +103,11 @@ const SingleLecture = () => {
                 footer={(_, { CancelBtn }) => (
                   <>
                     <CancelBtn />
-                    <Button onClick={handleSubmit}>Add</Button>
+                    <Button onClick={handleAssignmentCreation}>Add</Button>
                   </>)}>
                 <div className="flex flex-col gap-4">
                   <Input type="text" placeholder="Task" value={assignment.content} onChange={(e)=>{setAssignment({...assignment,content:e.target.value})}}/>
-                  <Input type="text" placeholder="Deadline" value={assignment.deadline} onChange={(e)=>{setAssignment({...assignment,deadline:e.target.value})}}/>
+                  <Input type="datetime-local" placeholder="Deadline" value={assignment.deadline} onChange={(e)=>{setAssignment({...assignment,deadline:e.target.value})}}/>
                 </div>
               </Modal>
           </div>
@@ -80,12 +116,28 @@ const SingleLecture = () => {
           <div>
             <p>Assignments</p>
             {lecture?.assignment?.length>0 ?lecture.assignment.map((item)=>
-            <div className='border my-2 p-1 border-black rounded' key={item.id}><p>{item.content}</p><p>Deadline: {item.deadline}</p></div>): <p>No Assignment Available</p>}
+            <div className='border my-2 p-1 border-black rounded' key={item.id}><p>{item.content}</p><p>Deadline: {formatTimestamp(+item.deadline)}</p></div>): <p>No Assignment Available</p>}
           </div>
           <div>
-            <p>Discussions</p>
+          <div className="flex justify-between items-center">
+              <p className="text-xl font-mono">Discussions</p>
+              <div>
+                <Button onClick={() => setOpen1(true)}>Create Discussion</Button>
+                <Modal open={open1} title="Create Discussion"
+                  onCancel={handleCancel}
+                  footer={(_, { CancelBtn }) => (
+                    <>
+                      <CancelBtn />
+                      <Button onClick={handleDiscussionCreation}>Add</Button>
+                    </>)}>
+                  <div className="flex flex-col gap-4">
+                    <Input type="text" placeholder="Issue" value={discussion.content} onChange={(e) => { setDiscussion({content:e.target.value}) }} />
+                  </div>
+                </Modal>
+              </div>
+            </div>
             {lecture?.discussion?.length>0 ?lecture.discussion.map((item)=>
-            <div className='border my-2 p-1 border-black rounded' key={item.id}><p>{item.content}</p></div>): <p>No Discussion Available</p>}
+            <div className='border my-2 p-1 border-black rounded flex justify-between items-center' key={item.id}><p>{item.content}</p><Button onClick={()=>handleDeleteDiscussion(item.id)}>Delete</Button></div>): <p>No Discussion Available</p>}
           </div>
           
         </div>}

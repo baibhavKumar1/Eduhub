@@ -1,16 +1,14 @@
 require('dotenv').config();
 const { ApolloServer } = require('apollo-server-express');
-const http = require('http');
 const express = require('express');
 const connection = require('./db.js');
 const { auth } = require('./Middleware/auth.middleware.js');
 const typeDefs = require('./schemas/typeDef.js');
 const resolvers = require('./schemas/resolvers.js');
-const { consumeCreateLecture,consumeCreateAssignment } = require('./utils/consumerabbitmq.js');
-const { Server } = require('socket.io');
+//const { consumeCreateLecture,consumeCreateAssignment } = require('./utils/consumerabbitmq.js');
 const PORT = process.env.PORT || 3000;
 
-const {app,io,server} = require('./socket')
+const {app,server} = require('./socket')
 
 const Apolloserver = new ApolloServer({ 
   typeDefs,
@@ -19,8 +17,8 @@ const Apolloserver = new ApolloServer({
 });
 
 app.use(express.json());
-consumeCreateLecture();
-consumeCreateAssignment()
+//consumeCreateLecture();
+//consumeCreateAssignment()
 const startApolloServer = async () => {
   try {
     await Apolloserver.start();

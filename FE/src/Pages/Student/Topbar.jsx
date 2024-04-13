@@ -1,5 +1,6 @@
-import { NotificationFilled, UserOutlined } from '@ant-design/icons'
-import { useNavigate } from 'react-router-dom'
+import { NotificationFilled, SettingOutlined, UserOutlined } from '@ant-design/icons'
+import { Input } from 'antd'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Topbar = () => {
     const navigate = useNavigate()
@@ -9,9 +10,11 @@ const Topbar = () => {
         navigate('/login')
     }
     return (
-        <div className="flex justify-between p-2 border-b items-center">
-            <p className="text-xl">EduHub</p>
+        <div className="flex justify-between p-2 border-b border-black items-center">
+            <Link to="/sdashboard"><p className="text-2xl">Eduhub</p></Link>
+            <Input placeholder='Search for any lectures, assignments, or users...' className='w-96'/>
             <div className="flex gap-4">
+            <SettingOutlined spin/>
                 <NotificationFilled />
                 <UserOutlined onClick={logout}/>
             </div>

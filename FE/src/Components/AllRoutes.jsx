@@ -3,7 +3,6 @@ import {Login} from "../Pages/Login";
 import Register from "../Pages/Register";
 import { Course,Students,Educators,Lectures,Dashboard,CourseLecture } from "../Pages/Admin";
 import { EducatorDashboard, EducatorLecture, EducatorSingleLecture, EducatorStudents } from "../Pages/Educator";
-import Trial from "../Pages/Trial";
 import Profile from "../Pages/Student/Profile";
 import { StudentDashboard, StudentLecture, StudentSingleAssignment, StudentSingleLecture } from "../Pages/Student";
 
@@ -31,7 +30,6 @@ const AllRoutes = () => {
             <Route path="/slecture" element={<StudentLecture/>}/>
             <Route path="/slecture/:id" element={<StudentSingleLecture/>}/>
             <Route path="/sassignment/:id" element={<StudentSingleAssignment/>}/>
-            <Route path="/trial" element={<Trial/>}/>
             <Route path="/profile" element={<Profile/>}/>
         </Routes>
     </div>

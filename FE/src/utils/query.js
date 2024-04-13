@@ -3,7 +3,7 @@ import { gql } from '@apollo/client';
 export const GET_SINGLE_USER = gql`
     query SpecificUser {
       getSingleUser {
-        _id
+        id
         username
         email
         password
@@ -15,13 +15,16 @@ export const GET_SINGLE_USER = gql`
 export const GET_USER_DATA = gql`
 query GetUserData {
   getUserData {
+    user{
+      id
+    }
     courses {
       id
       title
       duration
       description
       users {
-        _id
+        id
         username
         email
         password
@@ -74,7 +77,7 @@ query GetAllCourses {
       completedBy
     }
     users {
-      _id
+      id
       username
       email
       password
@@ -85,7 +88,7 @@ query GetAllCourses {
 export const GET_STUDENTS = gql`
 query GetStudents {
   getStudents {
-    _id
+    id
     username
     email
     password
@@ -96,7 +99,7 @@ query GetStudents {
 export const GET_EDUCATORS = gql`
 query GetEducators {
   getEducators {
-    _id
+    id
     username
     email
     password
@@ -104,6 +107,24 @@ query GetEducators {
   }
 }
 `;
+export const GET_SINGLE_COURSE = gql`
+query GetSingleCourse($id: ID!) {
+  getSingleCourse(id: $id) {
+    id
+    title
+    duration
+    description
+    lectures {
+      id
+      title
+      creator
+      url
+      duration
+      createdAt
+    }
+  }
+}
+`
 export const GET_SINGLE_LECTURE = gql`
 query GetSingleLecture($id: ID!) {
   getSingleLecture(id: $id) {
@@ -142,7 +163,6 @@ query GetSingleAssignment($id: ID!) {
       creator
       content
       deadline
-      completedBy
   }
 }
 `
@@ -156,3 +176,52 @@ query GetSingleDiscussion($id: ID!) {
   }
 }
 `
+
+export const GET_EDUCATORS_TASK= gql`
+query GetEducatorsTasks {
+  getEducatorsTasks {
+    user {
+      id
+      username
+    }
+    allLectures {
+      educator
+      lecture
+      title
+    }
+    allAssignments {
+      educator
+      lecture
+      assignment
+      title
+    }
+  }
+}`
+
+export const GET_STUDENTS_TASK = gql`
+query GetStudentsTasks {
+  getStudentsTasks {
+    id
+    username
+    email
+    password
+    role
+    completedAssignments {
+      id
+      lecture
+      creator
+      content
+      deadline
+      completedBy
+    }
+    completedLectures {
+      id
+      title
+      creator
+      url
+      duration
+      createdAt
+      completedBy
+    }
+  }
+}`

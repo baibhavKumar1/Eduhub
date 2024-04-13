@@ -2,10 +2,11 @@ const mongoose= require('mongoose');
 const notificationSchema = mongoose.Schema(
     {
         message:[String],
-        user:{ type: Schema.Types.ObjectId, ref: 'User' }
+        course:{ type: Schema.Types.ObjectId, ref: 'Course' },
+        creator:{type: Schema.Types.ObjectId, ref: 'User'},
+        createdAt:{type:Date,default:Date.now}
     },
-    {versionKey:false},
-    {timeStamp:true}
+    {versionKey:false}
 )
  
 const NotificationModel = mongoose.model('Notification',notificationSchema);

@@ -13,11 +13,9 @@ const io = new Server(server, {
     console.log("User connected", socket.id);
     
     socket.on("newLecture", (data) => {
-      console.log("Received lecture:", data);
       io.emit("sendLecture", data);
     });
     socket.on("newAssignment", (data) => {
-      console.log("Received assignment:", data);
       io.emit("sendAssignment", data);
     });
     
