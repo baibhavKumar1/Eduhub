@@ -150,11 +150,6 @@ const Dashboard = () => {
                 x: 1300,
               }}
             /></div>
-            {/* <ul>
-              <li>My productivity, how many lectures , assignments are done in a month</li>
-              <li>Students in my course </li>
-
-            </ul> */}
             <LineChart width={730} height={250} data={dataSet}
               margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />

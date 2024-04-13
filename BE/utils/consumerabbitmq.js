@@ -2,7 +2,6 @@ const { io } = require("socket.io-client");
 const { connectRabbitMQ } = require("./rabbitmq");
 //const channel = connectRabbitMQ()
 
-//const socket = io.connect("http://localhost:3000");
 const consumeCreateLecture = async () => {
     try {
         (await channel).assertQueue("create-lecture");
@@ -10,7 +9,6 @@ const consumeCreateLecture = async () => {
             try {
                 const data = JSON.parse(message.content);
                 //socket.emit("newLecture",data);
-                //console.log(data);
                 (await channel).ack(message);
             } catch (error) {
                 console.error("Error processing message:", error);
