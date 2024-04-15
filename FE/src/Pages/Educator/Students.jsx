@@ -26,7 +26,7 @@ const Student = () => {
     };
   });
   return (
-    <div className='h-screen flex flex-col'>
+    <div className='h-screen flex flex-col dark:bg-black dark:text-white'>
       <Topbar />
       <div className='flex flex-1 *:p-2'>
         <Sidebar />
@@ -35,7 +35,7 @@ const Student = () => {
         
           <p className="text-2xl">My Students: </p>
                   
-          <Collapse accordion items={value} />
+          <Collapse accordion items={value} className='bg-white'/>
           </div>
         </div>
       </div>

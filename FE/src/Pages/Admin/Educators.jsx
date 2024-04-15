@@ -57,14 +57,14 @@ const Educators = () => {
   };
   // const dataSet = data?.getEducatorsTasks
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col dark:bg-black dark:text-white">
         <Topbar/>
         <div className="flex flex-1 *:p-2">
             <Sidebar/>
             <div className="flex-1 flex flex-col ">
             <div className="flex justify-between ">
               <p className="text-2xl">Educators: </p>
-              <Button onClick={showModal}>Add Educator</Button>
+              <button className="border rounded hover:border-blue-400 hover:text-blue-400 h-8 text-sm px-4" onClick={showModal} >Add Educator</button>
               <Modal open={open} title="Add Educator"
                 onOk={handleOk} onCancel={handleCancel}
                 footer={(_, { CancelBtn }) => (
@@ -95,7 +95,7 @@ const Educators = () => {
             </LineChart>
               </div>
             </div>
-            <div className="flex flex-wrap gap-8 *:w-[200px] *:h-[200px] *:border *:text-center justify-center p-4 *:flex *:justify-center *:flex-col *:rounded *:border-black *:cursor-default">
+            <div className="flex flex-wrap gap-8 *:w-[200px] *:h-[200px] *:border *:text-center justify-center p-4 *:flex *:justify-center *:flex-col *:rounded *:border-black *:dark:border-white *:cursor-default">
               {data?.getEducatorsTasks && data?.getEducatorsTasks.user?.map((item)=>{
                 return(
                   <div className="border " key={item.id}>

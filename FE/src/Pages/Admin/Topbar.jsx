@@ -1,6 +1,7 @@
 import { NotificationOutlined, UserOutlined, SettingOutlined } from "@ant-design/icons"
-import { Input, Switch } from "antd"
+import { Input } from "antd"
 import { Link,useNavigate } from "react-router-dom"
+import { ModeToggle } from "../../Components/Toggle"
 
 const Topbar = () => {
   const navigate = useNavigate()
@@ -10,14 +11,13 @@ const Topbar = () => {
         navigate('/login')
     }
   return (
-    <div className="border-b border-black flex justify-between p-2 items-center">
+    <div className="border-b dark:bg-black dark:text-white dark:border-white border-black flex justify-between p-2 items-center">
     <Link to="/dashboard"><p className="text-2xl">Eduhub</p></Link>
     <Input className="w-96" placeholder="Search for any lectures, courses, students..."/>
         
     <div className="flex gap-4">
    
-    <Switch checkedChildren="1" unCheckedChildren="0" className="border border-black"/>
- 
+    <ModeToggle/>
     <SettingOutlined spin/> 
         <NotificationOutlined/>
         <UserOutlined onClick={logout}/>        

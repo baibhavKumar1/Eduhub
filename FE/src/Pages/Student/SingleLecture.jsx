@@ -68,16 +68,16 @@ const SingleLecture = () => {
     return formattedDate;
   }
   return (
-    <div>
+    <div className="h-screen flex flex-col">
       <Topbar />
       {lecture?.title &&
-        <div className='flex flex-1 flex-col space-y-4 p-2'>
+        <div className='flex flex-1 flex-col space-y-4 p-2 dark:bg-black dark:text-white '>
           <div className='flex justify-between'>
             <div>
               <p className='text-2xl'>{lecture.title}</p>
               <p>{lecture.course.title}</p>
             </div>
-            <Button onClick={handleComplete}>Mark As Complete</Button>
+            <button className="border rounded hover:border-blue-400 hover:text-blue-400 h-8 text-sm px-4" onClick={handleComplete}>Mark As Complete</button>
           </div>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
           <p>{formatTimestamp(+(lecture?.createdAt))}</p>
@@ -85,15 +85,15 @@ const SingleLecture = () => {
             <p className="text-xl font-mono">Assignments</p>
             {lecture?.assignment?.length > 0 ? lecture.assignment.map((item) =>
               <Link key={item.id} to={`/sassignment/${item.id}`}>
-                <div className='border my-2 p-1 border-black rounded'><p>{item.content}</p><p>Deadline: {formatTimestamp(+item.deadline)}</p>
+                <div className='border my-2 p-1 border-black dark:border-white rounded'><p>{item.content}</p><p>Deadline: {formatTimestamp(+item.deadline)}</p>
                 </div>
               </Link>) : <p>No Assignment Available</p>}
           </div>
           <div>
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center ">
               <p className="text-xl font-mono">Discussions</p>
               <div>
-                <Button onClick={() => setOpen(true)}>Create Discussion</Button>
+              <button className="border rounded hover:border-blue-400 hover:text-blue-400 h-8 text-sm px-4" onClick={() => setOpen(true)}>Create Discussion</button>
                 <Modal open={open} title="Create Discussion"
                   onCancel={handleCancel}
                   footer={(_, { CancelBtn }) => (
@@ -109,7 +109,7 @@ const SingleLecture = () => {
             </div>
 
             {lecture?.discussion?.length > 0 ? lecture.discussion.map((item) =>
-              <div className='border my-2 p-1 border-black rounded' key={item.id}><p>{item.content}</p></div>) : <p>No Discussion Available</p>}
+              <div className='border my-2 p-1 dark:border-white border-black rounded' key={item.id}><p>{item.content}</p></div>) : <p>No Discussion Available</p>}
           </div>
 
         </div>}

@@ -87,7 +87,7 @@ const SingleLecture = () => {
     return formattedDate;
 }
   return (
-    <div className='h-screen flex flex-col'>
+    <div className='h-screen flex flex-col dark:bg-black dark:text-white'>
       <Topbar />
       <div className='flex flex-1 *:p-2'>
         <Sidebar />
@@ -97,7 +97,7 @@ const SingleLecture = () => {
               <p className='text-2xl'>{lecture.title}</p>
               <p>{lecture.course.title}</p>
             </div>
-            <Button onClick={()=>setOpen(true)}>Create Assignment</Button>
+            <button className="border rounded hover:border-blue-400 hover:text-blue-400 h-8 text-sm px-4" onClick={() => setOpen(true)}>Create Assignment</button>
               <Modal open={open} title="Create Assignment"
                 onCancel={handleCancel} 
                 footer={(_, { CancelBtn }) => (
@@ -116,13 +116,13 @@ const SingleLecture = () => {
           <div>
             <p>Assignments</p>
             {lecture?.assignment?.length>0 ?lecture.assignment.map((item)=>
-            <div className='border my-2 p-1 border-black rounded' key={item.id}><p>{item.content}</p><p>Deadline: {formatTimestamp(+item.deadline)}</p></div>): <p>No Assignment Available</p>}
+            <div className='border my-2 p-1 dark:border-white border-black rounded' key={item.id}><p>{item.content}</p><p>Deadline: {formatTimestamp(+item.deadline)}</p></div>): <p>No Assignment Available</p>}
           </div>
           <div>
           <div className="flex justify-between items-center">
               <p className="text-xl font-mono">Discussions</p>
               <div>
-                <Button onClick={() => setOpen1(true)}>Create Discussion</Button>
+              <button className="border rounded hover:border-blue-400 hover:text-blue-400 h-8 text-sm px-4" onClick={() => setOpen1(true)}>Create Discussion</button>
                 <Modal open={open1} title="Create Discussion"
                   onCancel={handleCancel}
                   footer={(_, { CancelBtn }) => (
@@ -137,7 +137,9 @@ const SingleLecture = () => {
               </div>
             </div>
             {lecture?.discussion?.length>0 ?lecture.discussion.map((item)=>
-            <div className='border my-2 p-1 border-black rounded flex justify-between items-center' key={item.id}><p>{item.content}</p><Button onClick={()=>handleDeleteDiscussion(item.id)}>Delete</Button></div>): <p>No Discussion Available</p>}
+            <div className='border dark:border-white my-2 p-1 border-black rounded flex justify-between items-center' key={item.id}><p>{item.content}</p>
+            <Button onClick={()=>handleDeleteDiscussion(item.id)}>Delete</Button>
+            </div>): <p>No Discussion Available</p>}
           </div>
           
         </div>}

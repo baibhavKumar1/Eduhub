@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar";
 const Dashboard = () => {
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col dark:bg-black dark:text-white">
       <Topbar />
       <div className="flex-1 flex justify-between *:p-2">
         <Sidebar />
@@ -11,7 +11,7 @@ const Dashboard = () => {
         <p className="text-2xl">Insights </p>
         <div className="w-full p-2 h-[250px] border rounded">Registrations</div>
         <div className="w-full p-2 h-[250px] border rounded">Users</div>
-        <div className="flex border-b border-black justify-center gap-4 mb-6">
+        <div className="flex border-b dark:border-white border-black justify-center gap-4 mb-6">
         <p>Total Courses: 8</p>
         <p>Total Educators: 5</p>
         <p>Total Students: 89</p>

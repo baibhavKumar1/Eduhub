@@ -40,7 +40,7 @@ const CourseChooser = ({setLoggedIn}) => {
     }
   }
   return (
-    <div className="flex flex-col items-center p-8">
+    <div className="flex flex-col items-center p-8 dark:bg-black dark:text-white">
           <p className="text-2xl">Choose your courses (upto 3)</p>
           <div className="flex flex-wrap justify-center *:w-[200px] *:h-[200px] gap-4 m-10">
             {courseData?.getAllCourses.map((option) => (
@@ -57,7 +57,7 @@ const CourseChooser = ({setLoggedIn}) => {
             ))}
           </div>
           <Button disabled={selectedOptions?.length < 3} className="bg-blue-500 text-white rounded w-max" onClick={handleSubmit}>
-            Print Selected Options
+            Select Courses
           </Button>
         </div>
   )

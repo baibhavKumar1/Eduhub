@@ -6,19 +6,19 @@ import { GET_USER_DATA } from "../../utils/query";
 import { Link } from 'react-router-dom'
 import { socket } from "../../utils/Socket";
 const Dashboard = () => {
-    const { data,refetch } = useQuery(GET_USER_DATA)
+    const { data, refetch } = useQuery(GET_USER_DATA)
     const [loggedIn, setLoggedIn] = useState(false)
     console.log(data?.getUserData?.courses);
-    useEffect(()=>{
+    useEffect(() => {
         socket.on("sendLecture", (data) => {
-          console.log("Received lecture:", data);
-          refetch()
+            console.log("Received lecture:", data);
+            refetch()
         });
         socket.on("sendAssignment", (data) => {
-          console.log("Received Assignment:", data);
-          refetch()
+            console.log("Received Assignment:", data);
+            refetch()
         });
-      },[refetch])
+    }, [refetch])
     function formatTimestamp(timestamp) {
         const date = new Date(timestamp);
         const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -26,33 +26,33 @@ const Dashboard = () => {
         const day = date.getDate();
         const monthIndex = date.getMonth();
         const year = date.getFullYear();
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const formattedDay = `${day}${suffixes[day - 1]}`;
-    const formattedDate = `${formattedDay} ${months[monthIndex]}, ${year} ${hours>9?hours:"0"+hours}:${minutes>9 ? minutes : "0"+minutes}`;
-    return formattedDate;
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const formattedDay = `${day}${suffixes[day - 1]}`;
+        const formattedDate = `${formattedDay} ${months[monthIndex]}, ${year} ${hours > 9 ? hours : "0" + hours}:${minutes > 9 ? minutes : "0" + minutes}`;
+        return formattedDate;
     }
     return (
-        <div>
+        <div className="h-screen flex flex-col">
             <Topbar />
             {(loggedIn === false) && (data?.getUserData?.courses?.length < 3) ?
                 <CourseChooser setLoggedIn={setLoggedIn} /> :
-                <div className="flex">
-                    <div className="w-4/5 border-r border-black p-2" >
+                <div className="flex dark:bg-black dark:text-white flex-1">
+                    <div className="w-4/5 border-r dark:border-white border-black p-2" >
                         <div>
                             <p className="text-2xl">Lectures</p>
-                            <div className="h-max rounded my-2 py-2 flex flex-col gap-2">
-                                {data?.getUserData.lectures.length > 0 ? (
+                            <div className="h-max rounded my-2 py-2 flex flex-col gap-2 ">
+                                {data?.getUserData?.lectures.length > 0 ? (
                                     data?.getUserData.lectures
                                         .map((item) => (
                                             <Link to={`/slecture/${item.id}`} key={item.id}>
-                                            <div className={`${ item.completedBy.includes(data?.getUserData?.user?.id) ? 'bg-purple-500' : 'bg-gray-500 text-white'} p-4 rounded`} >
-                                                <p>{item.title}</p>
-                                                <div className="flex justify-between">
-                                                    {item.completedBy.includes(data?.getUserData?.user?.id) ? <p>Completed</p>: <p>Pending</p>}
-                                                    <p>Uploaded at: {formatTimestamp(+item.createdAt)}</p>
+                                                <div className={`${item.completedBy.includes(data?.getUserData?.user?.id) ? 'bg-purple-500' : 'bg-gray-500 text-white'} p-4 rounded`} >
+                                                    <p>{item.title}</p>
+                                                    <div className="flex justify-between">
+                                                        {item.completedBy.includes(data?.getUserData?.user?.id) ? <p>Completed</p> : <p>Pending</p>}
+                                                        <p>Uploaded at: {formatTimestamp(+item.createdAt)}</p>
+                                                    </div>
                                                 </div>
-                                            </div>
                                             </Link>
                                         ))
                                 ) : (
@@ -66,13 +66,13 @@ const Dashboard = () => {
                                 {data?.getUserData?.assignments?.length > 0 && data?.getUserData?.assignments.map((item) => {
                                     return (
                                         <Link to={`/sassignment/${item.id}`} key={item.id}>
-                                        <div className={` ${ item.completedBy.includes(data?.getUserData?.user?.id) ? 'bg-purple-500' : 'bg-gray-500 text-white'} p-4 rounded`}>
-                                            <p>Title: {item.content}</p>
-                                            <div className="flex justify-between">
-                                            {item.completedBy.includes(data?.getUserData?.user?.id) ? <p>Completed</p>: <p>Pending</p>}
-                                            <p>Ends at: {formatTimestamp(+item.deadline)}</p>
-                                            </div>
-                                        </div></Link>
+                                            <div className={` ${item.completedBy.includes(data?.getUserData?.user?.id) ? 'bg-purple-500' : 'bg-gray-500 text-white'} p-4 rounded`}>
+                                                <p>Title: {item.content}</p>
+                                                <div className="flex justify-between">
+                                                    {item.completedBy.includes(data?.getUserData?.user?.id) ? <p>Completed</p> : <p>Pending</p>}
+                                                    <p>Ends at: {formatTimestamp(+item.deadline)}</p>
+                                                </div>
+                                            </div></Link>
                                     )
                                 })}
                             </div>
@@ -81,7 +81,6 @@ const Dashboard = () => {
                     <div className="w-1/5">
                         <p className="text-2xl text-center">Recent Updates</p>
                     </div>
-
                 </div>
             }
         </div>

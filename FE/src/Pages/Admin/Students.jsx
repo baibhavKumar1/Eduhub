@@ -1,17 +1,17 @@
 import Topbar from "./Topbar"
 import Sidebar from "./Sidebar"
 import { useState } from "react";
-import { Button, Modal, Input, Tooltip } from "antd"
+import { Button, Modal, Input } from "antd"
 import { useQuery } from "@apollo/client";
 import { GET_STUDENTS_TASK } from "../../utils/query";
-import { CartesianGrid, Legend, Line, LineChart, XAxis, YAxis } from "recharts";
+import { CartesianGrid, Legend, Line, LineChart, XAxis, YAxis,Tooltip } from "recharts";
 const Students = () => {
   const [open, setOpen] = useState(false);
   const {data} = useQuery(GET_STUDENTS_TASK)
   const dataSet = data?.getStudentsTasks?.filter((item)=>item.role === "Student").map((item)=>(
       {
         id:item.id,
-        Name:item.username,
+        Name:item.username.toUpperCase(),
         Assignments:item.completedAssignments.length,
         Lectures:item.completedLectures.length,
         Role:item.role
@@ -28,7 +28,7 @@ const Students = () => {
     setOpen(false);
   };
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-max flex flex-col dark:bg-black dark:text-white">
         <Topbar/>
         <div className="flex flex-1 *:p-2">
             <Sidebar/>
@@ -50,7 +50,7 @@ const Students = () => {
                 </div>
               </Modal>
             </div>
-            <div className="h-56 my-2 border border-black p-1 rounded">
+            <div className="h-56 my-2 border dark:border-white border-black p-1 rounded">
               <p>Trending Students</p>
               <div>
               <LineChart width={600} height={200} style={{width:"500px"}} data={dataSet?.sort((a,b)=>a.Lectures-b.Lectures)}
@@ -65,7 +65,7 @@ const Students = () => {
             </LineChart>
               </div>
             </div>
-            <div className="flex flex-wrap gap-8 *:w-[200px] *:h-[200px] *:border *:text-center justify-center p-4 *:flex *:justify-center *:flex-col *:rounded *:border-black">
+            <div className="flex flex-wrap gap-8 *:w-[200px] *:h-[200px] *:border *:text-center justify-center p-4 *:flex *:justify-center *:flex-col *:rounded *:dark:border-white *:border-black">
               {data?.getStudentsTasks && dataSet.map((item)=>{
               return(<div key={item.id}>
                 <p>{item.Name.toUpperCase()}</p>

@@ -90,24 +90,10 @@ const columns = [
     key: '5',
   },
   {
-    title: 'Column 6',
-    dataIndex: 'address',
-    key: '6',
-  },
-  {
-    title: 'Column 7',
-    dataIndex: 'address',
-    key: '7',
-  },
-  {
-    title: 'Column 8',
-    dataIndex: 'address',
-    key: '8',
-  },
-  {
     title: 'Action',
     key: 'operation',
     width: 100,
+    fixed:'right'
   },
 ];
 const dataTable = [
@@ -123,6 +109,12 @@ const dataTable = [
     age: 40,
     address: 'London Park',
   },
+  {
+    key:'3',
+    name:'Joe Rogan',
+    age: 56,
+    address: 'Manhattan'
+  }
 ];
 const Dashboard = () => {
   const { data } = useQuery(GET_USER_DATA);
@@ -135,15 +127,15 @@ const Dashboard = () => {
   }, [data?.getUserData?.courses]);
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col ">
       <Topbar />
       {loggedIn === false ?
         <CourseChooser setLoggedIn={setLoggedIn} /> :
 
-        <div className="flex-1 flex justify-between *:p-2">
+        <div className="flex-1 flex justify-between *:p-2 dark:bg-black dark:text-white">
           <Sidebar />
           <div className="border-r flex-1">
-          <div className="w-[700px]"><Table
+          <div className="w-[800px] m-auto"><Table
               columns={columns}
               dataSource={dataTable}
               scroll={{
@@ -165,8 +157,8 @@ const Dashboard = () => {
           <div className="w-1/5">
             <p className="text-2xl text-center">Recent Updates</p>
             <div>
-              <p className="border rounded border-black p-1 my-2">New lecture created in DSA201</p>
-              <p className="border rounded border-black p-1 my-2">New lecture created in DSA201</p>
+              <p className="border rounded  p-1 my-2">New lecture created in DSA201</p>
+              <p className="border rounded  p-1 my-2">New lecture created in DSA201</p>
             </div>
           </div>
         </div>

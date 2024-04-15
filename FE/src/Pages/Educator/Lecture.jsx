@@ -93,7 +93,7 @@ const Lecture = () => {
     };
   });
   return (
-    <div className='h-screen flex flex-col'>
+    <div className='h-screen flex flex-col dark:bg-black dark:text-white'>
       <Topbar />
       <div className='flex flex-1 *:p-2'>
         <Sidebar />
@@ -101,7 +101,7 @@ const Lecture = () => {
           <div className="flex-1 flex flex-col gap-2" >
             <div className='flex justify-between'>
               <p className="text-2xl">My Lectures: </p>
-              <Button onClick={()=>setOpen(true)}>Create Lecture</Button>
+              <button className="border rounded hover:border-blue-400 hover:text-blue-400 h-8 text-sm px-4" onClick={() => setOpen(true)}>Create Lecture</button>
               <Modal open={open} title="Create Course"
                 onCancel={handleCancel} 
                 footer={(_, { CancelBtn }) => (
@@ -125,7 +125,7 @@ const Lecture = () => {
               </Modal>
             </div>
 
-            <Collapse accordion items={collapseValue} />
+            <Collapse accordion items={collapseValue} className='bg-white'/>
           </div>
         </div>
       </div>

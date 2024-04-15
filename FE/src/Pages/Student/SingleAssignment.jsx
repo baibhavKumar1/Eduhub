@@ -1,4 +1,4 @@
-import { Button, Input } from "antd"
+import { Input } from "antd"
 import Topbar from "./Topbar"
 import { useNavigate, useParams } from "react-router-dom"
 import { useMutation, useQuery } from "@apollo/client";
@@ -31,13 +31,13 @@ const SingleAssignment = () => {
   console.log(data?.getSingleAssignment);
   useEffect(()=>{setAssignment(data?.getSingleAssignment)},[data?.getSingleAssignment])
   return (
-    <div>
+    <div className="flex flex-col h-screen">
       <Topbar/>
-      <div className="m-3 p-3 space-y-4 border">
-      <p className="text-2xl text-center">Assignment : {assignment?.content}</p>
-      <p>Complete the assignment</p>
-      <Input type="url" placeholder="Enter Submission Link" className="border-black w-full"/>
-      <Button onClick={handleSubmit}>Submit</Button>
+      <div className="p-6 space-y-4 dark:bg-black dark:text-white flex-1">
+      <p className="text-2xl text-center">{assignment?.content}</p>
+      <p className="py-2">Complete the assignment</p>
+      <Input type="url" placeholder="Enter Submission Link" className="border-black dark:border-white w-full"/>
+      <button className="border rounded hover:border-blue-400 hover:text-blue-400 h-8 text-sm px-4" onClick={handleSubmit}>Submit</button>
       </div>
     </div>
   )
