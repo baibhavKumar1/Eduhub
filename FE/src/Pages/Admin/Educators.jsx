@@ -8,12 +8,13 @@ import { CREATE_USER } from "../../utils/mutations";
 import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts'
 const Educators = () => {
   const [open, setOpen] = useState(false);
-  const {data,refetch} = useQuery(GET_EDUCATORS_TASK);
+  const {loading,data,refetch} = useQuery(GET_EDUCATORS_TASK);
   const [createUser] = useMutation(CREATE_USER,{onCompleted:()=>refetch()})
-  const [task,setTask]= useState();
+  const [task,setTask]= useState({});
   useEffect(()=>{
+    if(!loading)
     setTask(data?.getEducatorsTasks)
-  },[data?.getEducatorsTasks])
+  },[data,loading])
   const dataSet = task?.user?.map(user => {
     const { id, username } = user;
     const lectures = task?.allLectures?.filter(lecture => lecture.educator === id);
@@ -96,12 +97,11 @@ const Educators = () => {
               </div>
             </div>
             <div className="flex flex-wrap gap-8 *:w-[200px] *:h-[200px] *:border *:text-center justify-center p-4 *:flex *:justify-center *:flex-col *:rounded *:border-black *:dark:border-white *:cursor-default">
-              {data?.getEducatorsTasks && data?.getEducatorsTasks.user?.map((item)=>{
+              {!loading && data?.getEducatorsTasks.user?.map((item)=>{
                 return(
                   <div className="border " key={item.id}>
                 <p>{item.username.toUpperCase()}</p>
-                <p>This is the first batch of MERN stack development</p>
-                <p>Courses: 23</p>
+                
               </div>
               )})}
             </div>

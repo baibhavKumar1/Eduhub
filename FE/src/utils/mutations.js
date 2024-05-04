@@ -31,8 +31,10 @@ export const ADD_COURSE = gql`
     mutation AddCourse($courses: [ID!]!) {
         addCourse(courses: $courses) {
           id
-          role
-          courses
+          courses {
+            id
+            title
+          }
         }
     }
 `;

@@ -5,17 +5,17 @@ const http = require('http');
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-      origin: `${process.env.FRONTEND_URL}`,
+      origin: "*",
       methods: ["GET", "POST"]
     }
-  });
+  }); 
   io.on("connection", (socket) => {
     console.log("User connected", socket.id);
     
     socket.on("newLecture", (data) => {
       io.emit("sendLecture", data);
     });
-    socket.on("newAssignment", (data) => {
+    socket.on("newAssignment", (data) => { 
       io.emit("sendAssignment", data);
     });
     

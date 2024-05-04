@@ -6,7 +6,7 @@ const Sidebar = () => {
           <div className="flex flex-col gap-4">
             <Link to="/dashboard">Dashboard</Link>
             <Link to="/courses">Courses</Link>
-            <Link to="/lectures">Lectures</Link>
+            {/* <Link to="/lectures">Lectures</Link> */}
             <Link to="/educators">Educators</Link>
             <Link to="/students">Students</Link>
           </div>

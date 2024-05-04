@@ -9,7 +9,7 @@ const lectureSchema = new Schema(
        createdAt:{type:Date,default:Date.now},
        assignment:{ type: [Schema.Types.ObjectId], ref: 'Assignment' },
        discussion:{ type: [Schema.Types.ObjectId], ref: 'Discussion' },
-       completedBy:{ type: [Schema.Types.ObjectId], ref: 'User' }
+       completedBy:{ type: [Schema.Types.ObjectId], ref: 'User' },
     },
     {versionKey:false}
 )

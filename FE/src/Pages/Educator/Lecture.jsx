@@ -4,12 +4,13 @@ import { Button, Collapse, Input, Modal, Select } from 'antd';
 import { useMutation, useQuery } from '@apollo/client'
 import { GET_USER_DATA } from '../../utils/query';
 import { useEffect, useState } from 'react';
-import { CREATE_LECTURE } from '../../utils/mutations';
+import { CREATE_LECTURE, DELETE_LECTURE } from '../../utils/mutations';
 import { Link } from 'react-router-dom';
 import { socket } from '../../utils/Socket';
 
 const Lecture = () => {
   const [open, setOpen] = useState(false);
+  const [open2, setOpen2] = useState(false);
   const { data,refetch } = useQuery(GET_USER_DATA)
   const [lecture,setLecture]=useState({title:"",duration:"",url:"",course:"Select courses"})
   
@@ -29,6 +30,17 @@ const Lecture = () => {
   const handleCancel= ()=>{
     setLecture({title:"",duration:"",url:"",course:"Select courses"})
     setOpen(false)
+  }
+  const [deleteLecture]= useMutation(DELETE_LECTURE,{onCompleted:()=>refetch()})
+  const handleDelete=async(id)=>{
+    try{
+      const res = await deleteLecture({variables:{id}})
+      if(res.data){
+        console.log(res.data);
+      }
+    }catch(err){
+      return err.message
+    }
   }
   const handleSubmit = async()=>{
     try{
@@ -57,16 +69,16 @@ const Lecture = () => {
         <div className='flex flex-col gap-2'>
           {courseLectures.length > 0 ? 
             courseLectures.map((lecture, index) => (
-              <div key={index} className='flex'>
+              <div key={index} className='flex gap-2'>
               <Link to= { `/electure/${lecture.id}`} className='border border-black p-1 rounded flex-1'><p className='text-'>{lecture.title}</p></Link>
               <div>
-              <Button>Edit</Button>
-              <Modal open={open} title="Create Course"
-                onCancel={handleCancel} 
+              <Button onClick={()=>setOpen2(true)} className='bg-blue-500 text-white'>Edit</Button>
+              <Modal open={open2} title="Create Lecture"
+                onCancel={()=>setOpen2(false)} 
                 footer={(_, { CancelBtn }) => (
                   <>
                     <CancelBtn />
-                    <Button onClick={handleSubmit}>Add</Button>
+                    <Button onClick={handleSubmit} >Add</Button>
                     
                   </>)}>
                 <div className="flex flex-col gap-4">
@@ -82,7 +94,7 @@ const Lecture = () => {
                   <Input type="text" placeholder="Duration" value={lecture.duration} onChange={(e)=>{setLecture({...lecture,duration:e.target.value})}}/>
                 </div>
               </Modal></div>
-              <Button>Delete</Button>
+              <Button onClick={()=>handleDelete(lecture.id)} className='bg-red-600 text-white'>Delete</Button>
               </div>
             )) 
             : 

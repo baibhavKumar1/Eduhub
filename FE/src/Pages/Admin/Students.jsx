@@ -7,8 +7,8 @@ import { GET_STUDENTS_TASK } from "../../utils/query";
 import { CartesianGrid, Legend, Line, LineChart, XAxis, YAxis,Tooltip } from "recharts";
 const Students = () => {
   const [open, setOpen] = useState(false);
-  const {data} = useQuery(GET_STUDENTS_TASK)
-  const dataSet = data?.getStudentsTasks?.filter((item)=>item.role === "Student").map((item)=>(
+  const {loading,data} = useQuery(GET_STUDENTS_TASK)
+  const dataSet = !loading && data?.getStudentsTasks?.filter((item)=>item.role === "Student").map((item)=>(
       {
         id:item.id,
         Name:item.username.toUpperCase(),
@@ -53,7 +53,7 @@ const Students = () => {
             <div className="h-56 my-2 border dark:border-white border-black p-1 rounded">
               <p>Trending Students</p>
               <div>
-              <LineChart width={600} height={200} style={{width:"500px"}} data={dataSet?.sort((a,b)=>a.Lectures-b.Lectures)}
+              <LineChart width={600} height={200} style={{width:"500px"}} data={!loading && dataSet?.sort((a,b)=>a.Lectures-b.Lectures)}
               className="m-auto w-full">
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="Name" />
@@ -66,11 +66,9 @@ const Students = () => {
               </div>
             </div>
             <div className="flex flex-wrap gap-8 *:w-[200px] *:h-[200px] *:border *:text-center justify-center p-4 *:flex *:justify-center *:flex-col *:rounded *:dark:border-white *:border-black">
-              {data?.getStudentsTasks && dataSet.map((item)=>{
+              {!loading && dataSet.map((item)=>{
               return(<div key={item.id}>
                 <p>{item.Name.toUpperCase()}</p>
-                <p>This is the third batch of MERN stack development</p>
-                <p>Courses: 45</p>
               </div>)})}
             </div>
           </div>

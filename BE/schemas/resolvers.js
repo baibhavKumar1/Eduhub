@@ -8,6 +8,7 @@ const { io } = require("socket.io-client");
 const { AuthenticationError } = require('apollo-server-express');
 //const { connectRabbitMQ } = require('../utils/rabbitmq');
 const { client } = require('../redis');
+const NotificationModel = require('../Model/notification.model');
 require('dotenv').config()
 //const channel = connectRabbitMQ()
 const socket = io.connect(`${process.env.BACKEND_URL}`);
@@ -32,7 +33,7 @@ const resolvers = {
       }
     },
     getUserData: async (_, __, req) => {
-      try {
+      try { 
         console.log(req.user._id);
         // const cachedUserData = await client.get(`UserData ${req.user._id}`);
         // if (cachedUserData) {
@@ -71,6 +72,7 @@ const resolvers = {
         console.log(err);
       }
     },
+    
     getAllCourses: async (_, __) => {
       // const cachedCourses = await client.get("courses");
       // if (cachedCourses) {
@@ -141,14 +143,14 @@ const resolvers = {
           throw new Error('Assignment not found');
         }
         return course
-      } catch (err) {
+      } catch (err) { 
         console.error(err);
         throw new Error('Internal server error');
       }
     },
     getSingleAssignment: async (_, { id }) => {
       try {
-        const assignment = await AssignmentModel.findById(id).populate('completedBy').exec();
+        const assignment = await AssignmentModel.findById(id).populate('completed.completedBy').exec(); 
         if (!assignment) {
           throw new Error('Assignment not found');
         }
@@ -176,6 +178,23 @@ const resolvers = {
         return new Error(error)
       }
     },
+    getNotifications:async(_,__,req)=>{
+      try{
+        const {courses} = await UserModel.findById(req.user._id);
+        const notifications = await NotificationModel.find({ course: { $in: courses } });
+        //console.log(notifications);
+        const mappedNotifications = notifications.map(notification => ({
+          message: notification.message,
+          createdAt: notification.createdAt,
+          id:notification._id
+      }));
+      console.log(mappedNotifications);
+      return mappedNotifications;
+      }
+      catch(err){
+        return {message:err.message};
+      }
+    }
   },
     Mutation: {
 
@@ -230,7 +249,7 @@ const resolvers = {
                 await CourseModel.findByIdAndUpdate(course, { $push: { users: user._id } }, { new: true })
               }
             }
-            return update
+            return newUser = await UserModel.findById(req.user._id).populate('courses')
           }
         } catch (err) {
           console.log(err.message);
@@ -242,11 +261,18 @@ const resolvers = {
           if (!userData || userData.role === "Student") {
             throw new AuthenticationError('Not Authorized');
           }
+          const courseName = await CourseModel.findById(course);
           const lecture = new LectureModel({
             title, url, duration, course, creator: req.user._id
           });
+          const notification = new NotificationModel({
+            message : `New lecture created in course ${courseName.title}`,course,creator:req.user._id
+          })
+          await notification.save();
           await lecture.save();
+          await UserModel.findByIdAndUpdate(req.user._id,{$push:{completedLectures:lecture._id}},{new:true})
           await CourseModel.findByIdAndUpdate(course, { $push: { lectures: lecture._id } }, { new: true });
+           
           //(await channel).assertQueue('create-lecture');
           //(await channel).sendToQueue('create-lecture', Buffer.from(JSON.stringify(lecture)));
           socket.emit("newLecture", lecture);
@@ -262,8 +288,13 @@ const resolvers = {
           if (!userData || userData.role === "Student") {
             throw new AuthenticationError('Not Authorized');
           }
+          const course = await CourseModel.findById(args.course);
           const lecture = await LectureModel.findByIdAndUpdate(args.id, { ...args }, { new: true });
           await lecture.save();
+          const notification = new NotificationModel({
+            message : `${lecture.title} updated in course ${course.title}`,course,creator:req.user._id
+          })
+          await notification.save();
           return lecture;
         } catch (err) {
           console.error(err);
@@ -278,8 +309,12 @@ const resolvers = {
           }
           const lecture = await LectureModel.findById(id);
           await CourseModel.findByIdAndUpdate(lecture.course, { $pull: { lectures: lecture._id } }, { new: true })
-          await DiscussionModel.deleteMany({ lecture: lecture })
-          await AssignmentModel.deleteMany({ lecture: lecture })
+          const notification = new NotificationModel({
+            message : `${lecture.title} lecture deleted `, course:lecture.course ,creator:req.user._id
+          })
+          await notification.save();
+          await DiscussionModel.deleteMany({ lecture: lecture._id })
+          await AssignmentModel.deleteMany({ lecture: lecture._id })
           await LectureModel.findByIdAndDelete(id);
           return { message: "Deleted" };
         } catch (err) {
@@ -298,6 +333,7 @@ const resolvers = {
           });
           const newLecture = await LectureModel.findById(lecture);
           newLecture.assignment.push(assignment._id);
+          await UserModel.findByIdAndUpdate(req.user._id,{$push:{completedAssignments:assignment._id}},{new:true})
           await Promise.all([assignment.save(), newLecture.save()]);
           socket.emit("newAssignment", assignment);
           //(await channel).assertQueue('create-assignment');
@@ -436,9 +472,12 @@ const resolvers = {
       },
       completeAssignment: async (_, { id }, req) => {
         try {
+          const curr = new Date();
           const assignment = await AssignmentModel.findByIdAndUpdate(
             id,
-            { $push: { completedBy: req.user._id } },
+            {
+              $push: {completedBy: req.user._id}
+          },
             { new: true } 
           );
           await UserModel.findByIdAndUpdate(
@@ -456,7 +495,7 @@ const resolvers = {
           // Update lecture with completion details 
           const lecture = await LectureModel.findByIdAndUpdate(
             id,
-            { $push: { completedBy: req.user._id } },
+            {$push: { completedBy: req.user._id}},
             { new: true }
           );
           await UserModel.findByIdAndUpdate(

@@ -5,13 +5,14 @@ import { Course,Students,Educators,Lectures,Dashboard,CourseLecture } from "../P
 import { EducatorDashboard, EducatorLecture, EducatorSingleLecture, EducatorStudents } from "../Pages/Educator";
 import Profile from "../Pages/Student/Profile";
 import { StudentDashboard, StudentLecture, StudentSingleAssignment, StudentSingleLecture } from "../Pages/Student";
-
+import Home from '../Pages/Home'
 const AllRoutes = () => {
   return (
     <div>
         <Routes>        
+        <Route path='/' element={<Home/>}/>
             <Route path='/login' element={<Login/>}/>
-            <Route path="/" element={<Register/>}/>
+            <Route path="/register" element={<Register/>}/>
             {/* Admin Routes */}
             <Route path='/dashboard' element={<Dashboard/>}/>
             <Route path='/courses' element={<Course/>}/>

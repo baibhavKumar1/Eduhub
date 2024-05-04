@@ -8,6 +8,7 @@ type User {
   email: String!
   password: String!
   role:String!
+  courses:[Course]
   completedAssignments:[Assignment]
   completedLectures:[Lecture]
 }
@@ -31,7 +32,7 @@ type Lecture {
     createdAt: String!
     assignment: [Assignment]
     discussion: [Discussion]
-    completedBy: [ID!]!
+    completedBy: [String]!
   }
   
   type Discussion{
@@ -46,7 +47,7 @@ type Lecture {
     creator:String!
     content:String!
     deadline:String!
-    completedBy:[String!]
+    completedBy:[String]!
   }
 type Auth {
   token: ID!
@@ -78,6 +79,12 @@ type UserData {
 type Message {
   message:String!
 }
+type Notification{
+  id:ID
+  message:String
+  creator:User
+  createdAt:String
+}
 type Query {
   getSingleUser: User
   getSingleLecture(id:ID!):Lecture
@@ -90,12 +97,13 @@ type Query {
   getSingleAssignment(id:ID!):Assignment
   getSingleDiscussion:Discussion
   getUserData:UserData
+  getNotifications:[Notification]
 }
 
 type Mutation {
   createUser(username:String!,email: String!, password: String!): Auth
   login(email: String!, password: String!): Auth 
-  addCourse(courses:[ID!]!):[Course]
+  addCourse(courses:[ID!]!):User
   createCourse(title:String!,duration:String!,description:String!):Course
   updateCourse(id:ID!,title:String,duration:String,description:String):Course
   deleteCourse(id:ID!):Message

@@ -5,17 +5,19 @@ import { useParams } from 'react-router-dom'
 import { useEffect, useState } from "react"
 const CourseLecture = () => {
   const { id } = useParams()
-  const { data } = useQuery(GET_SINGLE_COURSE, {
+  const { loading,data } = useQuery(GET_SINGLE_COURSE, {
     variables: { id }
   })
+  console.log(data);
   const [course, setCourse] = useState({});
   useEffect(() => {
+    if(!loading)
     setCourse(data?.getSingleCourse)
-  }, [data?.getSingleCourse])
+  }, [data,loading])
   return (
     <div>
       <Topbar />
-      {course?.title ? <div className="p-2">
+      {!loading && course?.title ? <div className="p-2">
         <p className="text-center text-2xl">{course.title}</p>
         <div className="space-y-4">
           <p className="text-xl font-mono">Lectures:</p>

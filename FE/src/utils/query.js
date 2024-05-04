@@ -8,6 +8,10 @@ export const GET_SINGLE_USER = gql`
         email
         password
         role
+        courses{
+          id
+          title
+        }
       }
     }
 `;
@@ -223,5 +227,13 @@ query GetStudentsTasks {
       createdAt
       completedBy
     }
+  }
+}`
+
+export const GET_NOTIFICATION=gql`
+query GetNotifications {
+  getNotifications {
+    message
+    createdAt
   }
 }`

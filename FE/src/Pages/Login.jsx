@@ -61,7 +61,7 @@ const Login = () => {
         <button className="border rounded hover:border-blue-400 hover:text-blue-400 h-8 text-sm px-4" onClick={handleSubmit}>Submit</button>
         <button className="border rounded hover:border-blue-400 hover:text-blue-400 h-8 text-sm px-4" >Forgot Your Password</button>
         </div>
-        <p>Not Registered? <Link to="/"><u>Register</u></Link></p>
+        <p>Not Registered? <Link to="/register"><u>Register</u></Link></p>
       </div>
       </div>
     </div>

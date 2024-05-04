@@ -10,7 +10,7 @@ import { socket } from "../../utils/Socket"
 const SingleLecture = () => {
   const [open, setOpen] = useState(false);
   const { id } = useParams()
-  const { data, refetch } = useQuery(GET_SINGLE_LECTURE, {
+  const { loading, data, refetch } = useQuery(GET_SINGLE_LECTURE, {
     variables: { id: id }
   })
   const [lecture, setLecture] = useState()
@@ -70,7 +70,7 @@ const SingleLecture = () => {
   return (
     <div className="h-screen flex flex-col">
       <Topbar />
-      {lecture?.title &&
+      {!loading && lecture?.title &&
         <div className='flex flex-1 flex-col space-y-4 p-2 dark:bg-black dark:text-white '>
           <div className='flex justify-between'>
             <div>

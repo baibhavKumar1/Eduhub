@@ -7,7 +7,7 @@ const assignmentSchema = new Schema(
         content:String,
         deadline:{type:Date,default:Date.now},
         createdAt:{type:Date,default:Date.now},
-        completedBy:{ type: [Schema.Types.ObjectId], ref: 'User' }
+        completedBy:{ type: [Schema.Types.ObjectId], ref: 'User' },
     },
     {versionKey:false}
 )

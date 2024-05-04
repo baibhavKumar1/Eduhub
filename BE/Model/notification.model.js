@@ -1,7 +1,7 @@
-const mongoose= require('mongoose');
-const notificationSchema = mongoose.Schema(
+const {Schema,model}= require('mongoose');
+const notificationSchema =new Schema(
     {
-        message:[String],
+        message:String,
         course:{ type: Schema.Types.ObjectId, ref: 'Course' },
         creator:{type: Schema.Types.ObjectId, ref: 'User'},
         createdAt:{type:Date,default:Date.now}
@@ -9,6 +9,6 @@ const notificationSchema = mongoose.Schema(
     {versionKey:false}
 )
  
-const NotificationModel = mongoose.model('Notification',notificationSchema);
+const NotificationModel = model('Notification',notificationSchema);
 
 module.exports= NotificationModel
